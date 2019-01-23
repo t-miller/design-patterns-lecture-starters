@@ -38,6 +38,28 @@ public class Inventory implements Iterable<Toy> {
 
     @Override
     public Iterator<Toy> iterator() {
-        return toys.iterator();
+        return new InventoryIterator();
+    }
+
+    private class InventoryIterator implements Iterator<Toy> {
+        Iterator toysIterator = toys.iterator();
+        Iterator backlogIterator = backlog.iterator();
+
+        @Override
+        public boolean hasNext() {
+            return toysIterator.hasNext() || backlogIterator.hasNext();
+        }
+
+        @Override
+        public Toy next() {
+            Toy toy = null;
+            if (toysIterator.hasNext()){
+                toy = (Toy) toysIterator.next();
+            }
+            else {
+                toy = (Toy) backlogIterator.next();
+            }
+            return toy;
+        }
     }
 }
